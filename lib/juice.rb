@@ -5,7 +5,7 @@ class Juice
   attr_accessor :title, :content, :remove_list, :remove_parent_lust, :uri, :debug
 
   def initialize(resource)
-    @debug = @verbose = true
+    #@debug = @verbose = true
     @remove_list = %w(
       //script
       //style
@@ -17,7 +17,6 @@ class Juice
       //navigator
       //menu
       //noscript
-      //form
       //select
       //radio
       //input
