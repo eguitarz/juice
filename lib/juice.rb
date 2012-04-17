@@ -31,7 +31,7 @@ class Juice
       //*[contains(@class,'breadcrumb')]
       //*[contains(@class,'preview')]
       //*[contains(@class,'Sidebar')]
-      //*[contains(@class,'ad')]
+      //*[@class='ad']
       //*[@class='form']
       //*[contains(@id,'nav')]
       //*[contains(@id,'aside')]
