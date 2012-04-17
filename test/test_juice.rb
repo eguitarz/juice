@@ -20,7 +20,8 @@ class JuiceTest < Test::Unit::TestCase
   #@@uri = 'http://fr.wikipedia.org/wiki/Gouvernement_fran%C3%A7ais'
   #@@uri = 'http://tw.yahoo.com/'
   #@@uri = 'http://olemortenamundsen.wordpress.com/2010/09/13/working-with-private-rubygems-in-rails-3-deploying-to-heroku/'
-  @@uri = 'http://www.cnblogs.com/justinw/archive/2012/03/16/doubanapi.html'
+  #@@uri = 'http://www.cnblogs.com/justinw/archive/2012/03/16/doubanapi.html'
+  @@uri = 'http://theleanstartup.com/principles'
   def test_extract
     juice = Juice.new(@@uri)
     #juice.scan(doc)

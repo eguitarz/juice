@@ -318,7 +318,7 @@ class Juice
   end
 
   def delete_empty_html
-    content.gsub!(/(<br\s*\/?>\s*)+/, '')
+   #content.gsub!(/(<br\s*\/?>\s*)+/, '')
     content.gsub!(/(<li>[\s$]*<\/li>)/, '')
   end
 
