@@ -1,3 +1,4 @@
+# encoding: utf-8
 require 'test/unit'
 require '/Users/eguitarz/Developer/juice/lib/juice.rb'
 
@@ -16,22 +17,44 @@ class JuiceTest < Test::Unit::TestCase
   #@@uri = 'http://www.hpx-party.com/blog/archives/4881'
   #@@uri = 'http://phrogz.net/programmingruby/language.html'
   #@@uri = 'http://blog.yam.com/tzui/article/48599613'
-  #@@uri = 'http://www.kt.com/corp/intro.jsp'
+  @@uri = 'http://www.kt.com/corp/intro.jsp'
   #@@uri = 'http://fr.wikipedia.org/wiki/Gouvernement_fran%C3%A7ais'
   #@@uri = 'http://tw.yahoo.com/'
   #@@uri = 'http://olemortenamundsen.wordpress.com/2010/09/13/working-with-private-rubygems-in-rails-3-deploying-to-heroku/'
   #@@uri = 'http://www.cnblogs.com/justinw/archive/2012/03/16/doubanapi.html'
   #@@uri = 'http://theleanstartup.com/principles'
   #@@uri = 'http://puppydad.blogspot.com/2010/12/blog-post_13.html'
-  @@uri = 'http://techorange.com/'
+  #@@uri = 'http://techorange.com/'
+  #@@uri = 'http://www.nownews.com/2012/04/12/301-2803918.htm'
   def test_extract
     juice = Juice.new(@@uri)
-    #juice.scan(doc)
-
     juice.extract
-    #puts juice.title
+    #puts juice.content
     puts juice.content
 
+    #converter = Iconv.new 'UTF-8', 'UTF-8'
+    #p converter.iconv  juice.content
+  end
+
+  def test_open_uri
+    stream = open('http://mrjamie.cc/2012/04/17/leverage/')
+    stream.each_line do |l|
+      puts l
+    end
+  end
+
+  def test_extract_blog
+    juice = Juice.new('http://dale-ma.heroku.com/blog/2012/03/25/first-trial-on-octopress/')
+    juice.extract
+    assert juice.title.match('章魚先生，你好')
+    assert juice.content.match('開始嘗試轟動台灣萬千RD的”Octopress”')
+  end
+
+  def test_extract_site
+    juice = Juice.new('http://theleanstartup.com/principles')
+    juice.extract
+    assert juice.title.match('The Lean Startup | Methodology')
+    assert juice.content.match('Startup success can be engineered by following the process')
   end
 
   def test_analyze

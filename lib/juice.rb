@@ -53,9 +53,11 @@ class Juice
     @text_per_link_ratio = 40
 
     resource = open(resource)
+    charset = resource.charset
     @uri = resource.base_uri
+    resource = resource.read
 
-    @doc = Nokogiri::HTML(resource) do |config|
+    @doc = Nokogiri::HTML(resource, nil, charset) do |config|
       config.noblanks
     end
 
