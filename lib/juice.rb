@@ -51,14 +51,22 @@ class Juice
 
     @text_per_tag_ratio = 15
     @text_per_link_ratio = 40
+    @parsed_charset = nil
+    @input_charset = nil
 
     resource = open(resource)
-    charset = resource.charset
+    @input_charset = resource.charset
     @uri = resource.base_uri
     resource = resource.read
 
-    @doc = Nokogiri::HTML(resource, nil, charset) do |config|
-      config.noblanks
+    
+    if resource =~ /<meta[^>]*HTTP-EQUIV=.*Content-Type.*content=.*charset=([\w\d-]+);?/i
+      @parsed_charset = $1
+    end
+    #p resource
+
+    @doc = Nokogiri::HTML(resource, nil, @input_charset) do |config|
+      config.noblanks 
     end
 
   end
@@ -118,6 +126,13 @@ class Juice
     rescue Exception => e
       @content = 'The source has something wrong... skip this source'
       debug(e)
+    end
+
+    # fix charset
+    if !@parsed_charset.nil? && @input_charset.downcase != @parsed_charset.downcase
+      @content.encode!("utf-8", @parsed_charset)
+      @content.gsub!(/[\n|\t|\r]/, '')
+      @content.gsub!('"', '')
     end
   end
 
