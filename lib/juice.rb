@@ -63,6 +63,7 @@ class Juice
       if resource =~ /<meta[^>]*HTTP-EQUIV=.*Content-Type.*content=.*charset=([\w\d-]+);?/i
         @parsed_charset = $1
 
+        # Do not set @input_charset as much as possible, nokogiri is not stable with assigned encoding
         @input_charset = charset if @parsed_charset && @parsed_charset.downcase != charset.downcase
       end
     rescue 
@@ -134,7 +135,7 @@ class Juice
     end
 
     # fix charset
-    if @charset_exception || !@parsed_charset.nil? && @input_charset.downcase != @parsed_charset.downcase
+    if @input_charset.nil? || @charset_exception || !@parsed_charset.nil? && @input_charset.downcase != @parsed_charset.downcase
       @title = $1 if @source =~ /<title>(.*)<\/title>/
       @title.encode!('utf-8', @parsed_charset)
 
