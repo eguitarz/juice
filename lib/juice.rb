@@ -57,7 +57,7 @@ class Juice
     resource = open(resource)
     charset = resource.charset
     @uri = resource.base_uri
-    resource = resource.read
+    @source = resource = resource.read 
 
     begin
       if resource =~ /<meta[^>]*HTTP-EQUIV=.*Content-Type.*content=.*charset=([\w\d-]+);?/i
@@ -135,7 +135,8 @@ class Juice
 
     # fix charset
     if @charset_exception || !@parsed_charset.nil? && @input_charset.downcase != @parsed_charset.downcase
-      @title.encode!("utf-8", @parsed_charset)
+      @title = $1 if @source =~ /<title>(.*)<\/title>/
+
       @content.encode!("utf-8", @parsed_charset)
       @content.gsub!(/[\n|\t|\r]/, '')
       @content.gsub!('"', '')
