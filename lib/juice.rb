@@ -64,8 +64,6 @@ class Juice
         @parsed_charset = $1
 
         @input_charset = charset if @parsed_charset && @parsed_charset.downcase != charset.downcase
-        p '@input charset = ' + @input_charset
-        p '@parsed_charset = ' + @parsed_charset
       end
     rescue 
       @charset_exception = true
@@ -137,6 +135,7 @@ class Juice
 
     # fix charset
     if @charset_exception || !@parsed_charset.nil? && @input_charset.downcase != @parsed_charset.downcase
+      @title.encode!("utf-8", @parsed_charset)
       @content.encode!("utf-8", @parsed_charset)
       @content.gsub!(/[\n|\t|\r]/, '')
       @content.gsub!('"', '')
