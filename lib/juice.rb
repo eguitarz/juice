@@ -55,15 +55,22 @@ class Juice
     @input_charset = nil
 
     resource = open(resource)
-    @input_charset = resource.charset
+    charset = resource.charset
     @uri = resource.base_uri
     resource = resource.read
 
-    
-    if resource =~ /<meta[^>]*HTTP-EQUIV=.*Content-Type.*content=.*charset=([\w\d-]+);?/i
-      @parsed_charset = $1
+    begin
+      if resource =~ /<meta[^>]*HTTP-EQUIV=.*Content-Type.*content=.*charset=([\w\d-]+);?/i
+        @parsed_charset = $1
+
+        @input_charset = charset if @parsed_charset && @parsed_charset.downcase != charset.downcase
+        p '@input charset = ' + @input_charset
+        p '@parsed_charset = ' + @parsed_charset
+      end
+    rescue 
+      @charset_exception = true
+      debug('Exception in parse charset.')
     end
-    #p resource
 
     @doc = Nokogiri::HTML(resource, nil, @input_charset) do |config|
       config.noblanks 
@@ -129,7 +136,7 @@ class Juice
     end
 
     # fix charset
-    if !@parsed_charset.nil? && @input_charset.downcase != @parsed_charset.downcase
+    if @charset_exception || !@parsed_charset.nil? && @input_charset.downcase != @parsed_charset.downcase
       @content.encode!("utf-8", @parsed_charset)
       @content.gsub!(/[\n|\t|\r]/, '')
       @content.gsub!('"', '')
