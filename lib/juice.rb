@@ -26,6 +26,7 @@ class Juice
       //*[contains(@class,'menu')]
       //*[contains(@class,'aside')]
       //*[contains(@class,'nav')]
+      //*[contains(@class,'sidebar')]
       //*[contains(@class,'footer')]
       //*[contains(@class,'comment')]
       //*[contains(@class,'breadcrumb')]
@@ -34,13 +35,14 @@ class Juice
       //*[@class='ad']
       //*[@class='form']
       //*[contains(@id,'nav')]
+      //*[contains(@id,'sidebar')]
       //*[contains(@id,'aside')]
       //*[contains(@id,'comment')]
       //*[contains(@id,'menu')]
       //*[contains(@id,'footer')]
       //*[contains(@id,'breadcrumb')]
       //*[contains(@id,'Footer')]
-      //*[contains(@id,'ad')]
+      //*[@id='ad']
       //*[contains(@id,'preview')]
       //*[@id='form']
     )
@@ -64,7 +66,7 @@ class Juice
         @parsed_charset = $1
 
         # Do not set @input_charset as much as possible, nokogiri is not stable with assigned encoding
-        @input_charset = charset if @parsed_charset && @parsed_charset.downcase != charset.downcase
+        @input_charset = charset if @parsed_charset && @parsed_charset.downcase != charset.downcase && @parsed_charset.downcase != 'utf-8'
       end
     rescue 
       @charset_exception = true
@@ -87,7 +89,7 @@ class Juice
 
     remove_selector = @remove_parent_list.join(' | ')
     @doc.xpath(remove_selector).each do |node|
-      node.parent.remove
+      #node.parent.remove
     end
 
     append_base_uri(@doc)
@@ -135,13 +137,24 @@ class Juice
     end
 
     # fix charset
-    if @input_charset.nil? || @charset_exception || !@parsed_charset.nil? && @input_charset.downcase != @parsed_charset.downcase
-      @title = $1 if @source =~ /<title>(.*)<\/title>/
-      @title.encode!('utf-8', @parsed_charset)
+    if @charset_exception || !@parsed_charset.nil? && !@input_charset.nil? && @input_charset.downcase != @parsed_charset.downcase
+      begin 
+        @title = $1 if @source =~ /<title>(.*)<\/title>/
+        @title.encode!('utf-8', @parsed_charset)
+      rescue
+        debug('Extract title error')
+      end
 
-      @content.encode!("utf-8", @parsed_charset)
-      @content.gsub!(/[\n|\t|\r]/, '')
-      @content.gsub!('"', '')
+      #p "parsed: #{@parsed_charset}"
+      #p "input: #{@inputs_charset}"
+
+      begin
+        @content.encode!("utf-8", @parsed_charset)
+        @content.gsub!(/[\n|\t|\r]/, '')
+        @content.gsub!('"', '')
+      rescue
+        debug('Transcoding error')
+      end
     end
   end
 
