@@ -7,6 +7,7 @@ class Juice
   def initialize(resource)
     #@debug = @verbose = true
     @remove_list = %w(
+      //link
       //script
       //style
       //comment()
@@ -59,7 +60,7 @@ class Juice
     resource = open(resource)
     charset = resource.charset
     @uri = resource.base_uri
-    @source = resource = resource.read 
+    @source = resource = resource.read
 
     begin
       if resource =~ /<meta[^>]*HTTP-EQUIV=.*Content-Type.*content=.*charset=([\w\d-]+);?/i
@@ -68,13 +69,13 @@ class Juice
         # Do not set @input_charset as much as possible, nokogiri is not stable with assigned encoding
         @input_charset = charset if @parsed_charset && @parsed_charset.downcase != charset.downcase && @parsed_charset.downcase != 'utf-8'
       end
-    rescue 
+    rescue
       @charset_exception = true
       debug('Exception in parse charset.')
     end
 
     @doc = Nokogiri::HTML(resource, nil, @input_charset) do |config|
-      config.noblanks 
+      config.noblanks
     end
 
   end
@@ -84,7 +85,7 @@ class Juice
 
     remove_selector = @remove_list.join(' | ')
     @doc.xpath(remove_selector).each do |node|
-      node.remove
+      node.remove if node.name.downcase != 'body'
     end
 
     remove_selector = @remove_parent_list.join(' | ')
@@ -138,7 +139,7 @@ class Juice
 
     # fix charset
     if @charset_exception || !@parsed_charset.nil? && !@input_charset.nil? && @input_charset.downcase != @parsed_charset.downcase
-      begin 
+      begin
         @title = $1 if @source =~ /<title>(.*)<\/title>/
         @title.encode!('utf-8', @parsed_charset)
       rescue
