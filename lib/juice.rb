@@ -5,8 +5,12 @@ class Juice
   attr_accessor :title, :content, :remove_list, :remove_parent_lust, :uri, :debug
 
   def initialize(resource)
-    #@debug = @verbose = true
+    @debug = @verbose = false
+    @is_article = false
+    @charset_exception = false
     @remove_list = %w(
+      //meta
+      //base
       //link
       //script
       //style
@@ -151,7 +155,7 @@ class Juice
 
       begin
         @content.encode!("utf-8", @parsed_charset)
-        @content.gsub!(/[\n|\t|\r]/, '')
+        @content.gsub!(/[\n|\t]/, '')
         @content.gsub!('"', '')
       rescue
         debug('Transcoding error')
@@ -189,8 +193,6 @@ class Juice
   end
 
   def extract_content
-    tmp = @doc.content
-
     if @doc.xpath('//article').empty?
       trunk = pick_main_trunk
     else

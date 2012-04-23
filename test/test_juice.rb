@@ -17,7 +17,7 @@ class JuiceTest < Test::Unit::TestCase
   #@@uri = 'http://www.hpx-party.com/blog/archives/4881'
   #@@uri = 'http://phrogz.net/programmingruby/language.html'
   #@@uri = 'http://blog.yam.com/tzui/article/48599613'
-  @@uri = 'http://www.kt.com/corp/intro.jsp'
+  #@@uri = 'http://www.kt.com/corp/intro.jsp'
   #@@uri = 'http://fr.wikipedia.org/wiki/Gouvernement_fran%C3%A7ais'
   #@@uri = 'http://tw.yahoo.com/'
   #@@uri = 'http://olemortenamundsen.wordpress.com/2010/09/13/working-with-private-rubygems-in-rails-3-deploying-to-heroku/'
@@ -26,36 +26,54 @@ class JuiceTest < Test::Unit::TestCase
   #@@uri = 'http://puppydad.blogspot.com/2010/12/blog-post_13.html'
   #@@uri = 'http://techorange.com/'
   #@@uri = 'http://www.nownews.com/2012/04/12/301-2803918.htm'
+  #@@uri = 'http://mrjamie.cc/2012/04/17/leverage/'
+  @@uri = 'http://disp.cc/b/27-3v1A'
+  @@uri = 'http://www.macuknow.com/node/16022'
   def test_extract
     juice = Juice.new(@@uri)
     juice.extract
+    #puts juice.content.encode('big5', 'utf-8')
     #puts juice.content
-    puts juice.content
+    #ec = Encoding::Converter.new("big5", "utf-8")
+    #ec2 = Encoding::Converter.new("big5", "UTF-8")
+    #tmp = ec.convert(juice.content).dump
+    #juice.content = juice.content.encode("utf-8", "big5")
+    #juice.content.gsub!(/[\n|\t|\r]/, '')
+    #juice.content.gsub!('\"', '')
+    p juice.content
+    #puts ec2.convert(tmp).dump
 
     #converter = Iconv.new 'UTF-8', 'UTF-8'
     #p converter.iconv  juice.content
   end
 
-  def test_open_uri
-    stream = open('http://mrjamie.cc/2012/04/17/leverage/')
-    stream.each_line do |l|
-      puts l
-    end
-  end
+  # def test_big5
+  #   juice = Juice.new('http://www.nownews.com/2012/04/12/301-2803918.htm')
+  #   juice.extract
+  #   assert juice.title.match('文林苑都更案延燒')
+  #   assert juice.content.match('我們要回家')
+  # end
 
-  def test_extract_blog
-    juice = Juice.new('http://dale-ma.heroku.com/blog/2012/03/25/first-trial-on-octopress/')
-    juice.extract
-    assert juice.title.match('章魚先生，你好')
-    assert juice.content.match('開始嘗試轟動台灣萬千RD的”Octopress”')
-  end
+  # def test_open_uri
+  #   stream = open('http://mrjamie.cc/2012/04/17/leverage/')
+  #   stream.each_line do |l|
+  #     puts l
+  #   end
+  # end
 
-  def test_extract_site
-    juice = Juice.new('http://theleanstartup.com/principles')
-    juice.extract
-    assert juice.title.match('The Lean Startup | Methodology')
-    assert juice.content.match('Startup success can be engineered by following the process')
-  end
+  # def test_extract_blog
+  #   juice = Juice.new('http://dale-ma.heroku.com/blog/2012/03/25/first-trial-on-octopress/')
+  #   juice.extract
+  #   assert juice.title.match('章魚先生，你好')
+  #   assert juice.content.match('開始嘗試轟動台灣萬千RD的”Octopress”')
+  # end
+
+  # def test_extract_site
+  #   juice = Juice.new('http://theleanstartup.com/principles')
+  #   juice.extract
+  #   assert juice.title.match('The Lean Startup | Methodology')
+  #   assert juice.content.match('Startup success can be engineered by following the process')
+  # end
 
   def test_analyze
     #juice = Juice.new(@@uri)
