@@ -138,7 +138,7 @@ class Juice
     if @charset_exception || !@parsed_charset.nil? && !@input_charset.nil? && @input_charset.downcase != @parsed_charset.downcase
       begin
         @title = $1 if @source =~ /<title>(.*)<\/title>/
-        @title.encode!('utf-8', @parsed_charset)
+        @title = @title.encode!('utf-8', @parsed_charset)
       rescue
         debug('Extract title error')
       end
@@ -147,8 +147,8 @@ class Juice
       #p "input: #{@inputs_charset}"
 
       begin
-        @content.encode!("utf-8", @parsed_charset)
-        @content.gsub!(/[\n|\t]/, '')
+        @content = @content.encode!("utf-8", @parsed_charset)
+        @content.gsub!(/[\n|\t|\r]/, '')
         @content.gsub!('"', '')
       rescue
         debug('Transcoding error')
