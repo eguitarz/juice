@@ -33,16 +33,18 @@ class Juice
       //*[contains(@class,'nav')]
       //*[contains(@class,'sidebar')]
       //*[contains(@class,'footer')]
-      //*[contains(@class,'comment')]
       //*[contains(@class,'breadcrumb')]
       //*[contains(@class,'preview')]
       //*[contains(@class,'Sidebar')]
       //*[@class='ad']
+      //*[@class='comment']
+      //*[@class='comments']
       //*[@class='form']
       //*[contains(@id,'nav')]
       //*[contains(@id,'sidebar')]
       //*[contains(@id,'aside')]
-      //*[contains(@id,'comment')]
+      //*[@id='comment']
+      //*[@id='comments']
       //*[contains(@id,'menu')]
       //*[contains(@id,'footer')]
       //*[contains(@id,'breadcrumb')]
@@ -50,10 +52,6 @@ class Juice
       //*[@id='ad']
       //*[contains(@id,'preview')]
       //*[@id='form']
-    )
-
-    @remove_parent_list = %w(
-      //a[contains(@rel,'nofollow')]
     )
 
     @text_per_tag_ratio = 15
@@ -90,11 +88,6 @@ class Juice
     remove_selector = @remove_list.join(' | ')
     @doc.xpath(remove_selector).each do |node|
       node.remove if node.name.downcase != 'body'
-    end
-
-    remove_selector = @remove_parent_list.join(' | ')
-    @doc.xpath(remove_selector).each do |node|
-      #node.parent.remove
     end
 
     append_base_uri(@doc)
