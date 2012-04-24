@@ -25,10 +25,12 @@ class JuiceTest < Test::Unit::TestCase
   #@@uri = 'http://theleanstartup.com/principles'
   #@@uri = 'http://puppydad.blogspot.com/2010/12/blog-post_13.html'
   #@@uri = 'http://techorange.com/'
-  #@@uri = 'http://www.nownews.com/2012/04/12/301-2803918.htm'
   #@@uri = 'http://mrjamie.cc/2012/04/17/leverage/'
-  @@uri = 'http://disp.cc/b/27-3v1A'
-  @@uri = 'http://www.macuknow.com/node/16022'
+  #@@uri = 'http://disp.cc/b/27-3v1A'
+  #@@uri = 'http://www.macuknow.com/node/16022'
+  #@@uri = 'http://www.tutorialspoint.com/ruby/ruby_exceptions.htm'
+  #@@uri = 'http://lifehacker.com/5904256/ways-to-make-your-macs-dashboard-more-useful'
+  @@uri = 'http://www.nownews.com/2012/04/23/350-2807024.htm'
   def test_extract
     juice = Juice.new(@@uri)
     juice.extract
@@ -41,6 +43,7 @@ class JuiceTest < Test::Unit::TestCase
     #juice.content.gsub!(/[\n|\t|\r]/, '')
     #juice.content.gsub!('\"', '')
     p juice.content
+    p ">>>>>>>>>>>>#{juice.content.encoding}<<<<<<<<<<<<<<"
     #puts ec2.convert(tmp).dump
 
     #converter = Iconv.new 'UTF-8', 'UTF-8'

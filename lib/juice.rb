@@ -147,10 +147,9 @@ class Juice
       #p "input: #{@inputs_charset}"
 
       begin
-        @content = @content.encode!("utf-8", @parsed_charset)
-        @content = @content.gsub!(/[\n|\t|\r]/, '')
-        @content = @content.gsub!('"', '')
-	@content = @content.toutf8
+        #@content.encode!("utf-8", @parsed_charset)
+        @content.gsub!(/[\n|\t|\r]/, '')
+        @content.gsub!('"', '')
       rescue
         debug('Transcoding error')
       end
